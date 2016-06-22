@@ -2,6 +2,7 @@ build:
 	go build -i
 
 run:
+	govendor sync
 	go run *.go
 
 devdeps:
