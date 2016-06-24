@@ -1,25 +1,42 @@
 package main
 
 import (
+	_ "github.com/Sirupsen/logrus"
 	"github.com/codestand/editor/db"
 	"github.com/codestand/editor/project"
 	"github.com/codestand/editor/user"
+	"github.com/gin-gonic/contrib/renders/multitemplate"
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"github.com/satori/go.uuid"
+	"path/filepath"
 )
+
+func createRender() multitemplate.Render {
+	r := multitemplate.New()
+	includes, err := filepath.Glob("templates/includes/*.html.tmpl")
+	if err != nil {
+		panic(err)
+	}
+	for _, include := range includes {
+		r.AddFromFiles(filepath.Base(include), "templates/layout.html.tmpl", include)
+	}
+	return r
+}
 
 func main() {
 	db.Init()
 	defer db.Close()
 	db.ORM.AutoMigrate(&user.User{})
+	db.ORM.AutoMigrate(&project.Project{})
 
-	store := sessions.NewCookieStore([]byte("TODO: secret?"))
+	store := sessions.NewCookieStore(uuid.NewV4().Bytes()) // TODO: use redis
 
 	r := gin.Default()
-	r.Use(sessions.Sessions("user", store))
-	r.Static("/assets", "./assets")
+	r.HTMLRender = createRender()
 
-	r.LoadHTMLGlob("templates/*.tmpl")
+	r.Use(sessions.Sessions("_", store))
+	r.Static("/assets", "./assets")
 
 	ur := user.Resource{}
 	pr := project.Resource{}

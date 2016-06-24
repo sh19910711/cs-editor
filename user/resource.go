@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/codestand/editor/db" // TODO: replace with model
+	log "github.com/Sirupsen/logrus"
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -10,18 +10,32 @@ import (
 type Resource struct {
 }
 
+type UserForm struct {
+	LoginID  string `form:"user.login_id" binding:"required,max=32"`
+	Password string `form:"user.password" binding:"required,max=128"`
+}
+
 func (r *Resource) HomePage(c *gin.Context) {
 	s := sessions.Default(c)
-
-	var loginUser User
-	loginID := s.Get("user.login_id")
-	db.ORM.Where("login_id = ?", loginID).First(&loginUser)
-
-	c.HTML(http.StatusOK, "index.html.tmpl", gin.H{"loginUser": loginUser})
+	h := gin.H{}
+	u, err := Find(s.Get("current_user"))
+	if err == nil {
+		h["loginUser"] = u
+		h["logined"] = true
+	}
+	c.HTML(http.StatusOK, "index.html.tmpl", h)
 }
 
 func (r *Resource) DashboardPage(c *gin.Context) {
-	c.HTML(http.StatusOK, "dashboard.html.tmpl", gin.H{})
+	s := sessions.Default(c)
+	u, err := Find(s.Get("current_user"))
+	log.Infof("user: %s", s.Get("current_user"))
+	if err != nil {
+		s.Clear()
+		c.Redirect(http.StatusFound, "/")
+	} else {
+		c.HTML(http.StatusOK, "dashboard.html.tmpl", gin.H{"loginUser": u})
+	}
 }
 
 func (r *Resource) LoginPage(c *gin.Context) {
@@ -29,40 +43,34 @@ func (r *Resource) LoginPage(c *gin.Context) {
 }
 
 func (r *Resource) Create(c *gin.Context) {
-	var newUser User
-	c.Bind(&newUser)
+	var uf UserForm
+	c.Bind(&uf)
 
-	var existUser User
-	db.ORM.Where("login_id = ?", newUser.LoginID).First(&existUser)
-	if newUser.LoginID == existUser.LoginID {
-		c.JSON(http.StatusConflict, gin.H{"msg": "ERROR"})
+	if Exist(uf.LoginID) {
+		c.JSON(http.StatusConflict, gin.H{"msg": "ERROR: already exists"})
 		return
 	}
 
-	newUser.Password = newUser.EncryptedPassword()
-	db.ORM.Save(&newUser)
-	c.JSON(http.StatusOK, gin.H{"msg": "OK"})
+	u := User{LoginID: uf.LoginID, Password: uf.Password}
+	Save(&u)
+
+	c.HTML(http.StatusOK, "ok.html.tmpl", gin.H{"msg": "created"})
 }
 
 func (r *Resource) Auth(c *gin.Context) {
-	// query
-	var loginUser User
-	c.Bind(&loginUser)
-	loginUser.Password = loginUser.EncryptedPassword()
+	var uf UserForm
+	c.Bind(&uf)
 
-	// target user
-	var targetUser User
-	db.ORM.Where("login_id = ?", loginUser.LoginID).First(&targetUser)
-
-	if targetUser.Password == loginUser.Password {
-		// generate session
+	u, err := FindWithPassword(uf.LoginID, uf.Password)
+	if err != nil {
+		log.Warn(err)
+		c.JSON(http.StatusForbidden, gin.H{"msg": "login failed"})
+	} else {
 		s := sessions.Default(c)
-		s.Set("login_id", targetUser.LoginID)
+		s.Set("current_user", u.LoginID)
 		s.Save()
 
 		c.Redirect(http.StatusFound, "/dashboard")
-	} else {
-		c.JSON(http.StatusForbidden, gin.H{"msg": "login failed"})
 	}
 }
 
@@ -71,7 +79,5 @@ func (r *Resource) RegisterPage(c *gin.Context) {
 }
 
 func (r *Resource) List(c *gin.Context) {
-	var users []User
-	db.ORM.Find(&users)
-	c.JSON(http.StatusOK, gin.H{"users": users})
+	c.JSON(http.StatusOK, gin.H{"users": AllUsers()})
 }

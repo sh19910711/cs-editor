@@ -1,3 +1,4 @@
 editor
 vendor/*
 !vendor/vendor.json
+tmp

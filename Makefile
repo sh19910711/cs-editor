@@ -1,13 +1,16 @@
 build:
+	govendor sync
 	go build -i
 
 run:
-	govendor sync
-	go run *.go
+	go run main.go
+
+fmt:
+	go fmt ./...
 
 devdeps:
 	go get -u github.com/kardianos/govendor
 	govendor init
 
 test:
-	go test -v ./...
+	go test --tags user -v ./...

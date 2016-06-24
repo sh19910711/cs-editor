@@ -1,8 +1,9 @@
 package project
 
 import (
-	"github.com/codestand/editor/db" // TODO: replace with model
-	_ "github.com/gin-gonic/contrib/sessions"
+	log "github.com/Sirupsen/logrus"
+	"github.com/codestand/editor/user"
+	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -11,14 +12,19 @@ type Resource struct {
 }
 
 func (r *Resource) Create(c *gin.Context) {
-	// TODO
-	c.JSON(http.StatusOK, gin.H{"hello": "world"})
+	s := sessions.Default(c)
+	log.Infof("user: %s", s.Get("current_user"))
+	u, err := user.Find(s.Get("current_user"))
+	if err == nil {
+		Save(Project{Owner: u})
+		c.JSON(http.StatusOK, gin.H{"hello": "world"})
+	} else {
+		c.JSON(http.StatusForbidden, gin.H{"msg": "Forbidden"})
+	}
 }
 
 func (r *Resource) List(c *gin.Context) {
-	var projects []Project
-	db.ORM.Find(&projects)
-	c.JSON(http.StatusOK, gin.H{"projects": projects})
+	c.JSON(http.StatusOK, gin.H{"projects": AllProjects()})
 }
 
 func (r *Resource) Show(c *gin.Context) {
