@@ -1,0 +1,73 @@
+---
+swagger: '2.0'
+
+info:
+  title: Web IDE API
+  description: Manage project files
+  version: v1
+
+basePath: /api
+
+schemes:
+  - https
+produces:
+  - application/json
+consumes:
+  - application/json
+
+paths:
+  /users:
+    get:
+      description: Get user list
+      responses:
+        200:
+          description: Returns all users
+          schema:
+            type: object
+            properties:
+              users:
+                type: array
+                items:
+                  $ref: '#/definitions/User'
+
+  /projects:
+    get:
+      description: Get all projects
+      responses:
+        200:
+          description: Returns all projects
+          schema:
+            type: object
+            properties:
+              projects:
+                type: array
+                items:
+                  $ref: '#/definitions/Project'
+    post:
+      description: Create new project
+      responses:
+        200:
+          description: Created
+      parameters:
+        - name: project
+          in: body
+          schema:
+            $ref: '#/definitions/Project'
+
+definitions:
+  Project:
+    type: object
+    properties:
+      name:
+        description: The name of project
+        type: string
+
+  User:
+    type: object
+    properties:
+      login_id:
+        description: Login ID
+        type: string
+      screen_name:
+        description: Screen name
+        type: string

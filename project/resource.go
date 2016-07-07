@@ -16,8 +16,9 @@ func (r *Resource) Create(c *gin.Context) {
 	log.Infof("user: %s", s.Get("current_user"))
 	u, err := user.Find(s.Get("current_user"))
 	if err == nil {
-		Save(Project{Owner: u})
-		c.JSON(http.StatusOK, gin.H{"hello": "world"})
+		p := Project{Owner: u}
+		Save(p)
+		c.JSON(http.StatusOK, gin.H{"project": p})
 	} else {
 		c.JSON(http.StatusForbidden, gin.H{"msg": "Forbidden"})
 	}

@@ -3,6 +3,7 @@ package main
 import (
 	_ "github.com/Sirupsen/logrus"
 	"github.com/codestand/editor/db"
+	"github.com/codestand/editor/dev" // TODO: unload unless development
 	"github.com/codestand/editor/project"
 	"github.com/codestand/editor/user"
 	"github.com/gin-gonic/contrib/renders/multitemplate"
@@ -57,6 +58,12 @@ func main() {
 	api.GET("/projects/:id/*path", pr.ReadFile)
 	api.POST("/projects/:id/*path", pr.CreateFile)
 	api.PUT("/projects/:id/*path", pr.UpdateFile)
+
+	// TODO:
+	r.Static("/swagger", "./swagger")
+	dr := dev.Resource{}
+	devpages := r.Group("dev")
+	devpages.GET("/doc", dr.Doc)
 
 	r.Run()
 }

@@ -1,0 +1,14 @@
+{{ define "title" }}
+APIDOC
+{{ end }}
+{{ define "content" }}
+<script src="/assets/js/lib/swagger-ui.min.js"></script>
+<script>
+var swaggerUi = new SwaggerUi({
+  url: "http://petstore.swagger.io/v2/swagger.json",
+  dom_id: "swagger-ui-container"
+});
+
+swaggerUi.load();
+</script>
+{{ end }}
