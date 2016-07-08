@@ -13,6 +13,10 @@ type User struct {
 	Password string `json:"-" db:"password"`
 }
 
+func AutoMigrate() {
+	db.ORM.AutoMigrate(&User{})
+}
+
 // TODO: utilize
 func EncryptString(s string) string {
 	salt := []byte("TODO: change me")

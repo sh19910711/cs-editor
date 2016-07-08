@@ -28,8 +28,8 @@ func createRender() multitemplate.Render {
 func main() {
 	db.Init()
 	defer db.Close()
-	db.ORM.AutoMigrate(&user.User{})
-	db.ORM.AutoMigrate(&project.Project{})
+	user.AutoMigrate()
+	project.AutoMigrate()
 
 	store := sessions.NewCookieStore(uuid.NewV4().Bytes()) // TODO: use redis
 

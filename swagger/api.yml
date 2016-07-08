@@ -54,6 +54,29 @@ paths:
           schema:
             $ref: '#/definitions/Project'
 
+  /projects/{name}/{path}:
+    post:
+      description: Create new file
+      responses:
+        200:
+          description: Created
+    put:
+      description: Update file
+      responses:
+        200:
+          description: Updated
+    parameters:
+      - name: name
+        description: The name of project
+        in: path
+        type: string
+        required: true
+      - name: path
+        description: The path of file
+        in: path
+        type: string
+        required: true
+
 definitions:
   Project:
     type: object
