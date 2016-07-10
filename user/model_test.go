@@ -26,7 +26,7 @@ func TestMain(m *testing.M) {
 	db.ORM.AutoMigrate(User{})
 
 	// create a fake user
-	Save(&User{LoginID: "foo", Password: "bar"})
+	Save(&User{LoginId: "foo", Password: "bar"})
 
 	flag.Parse()
 	os.Exit(m.Run())

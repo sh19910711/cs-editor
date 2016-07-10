@@ -26,7 +26,7 @@ func (r *Resource) Create(c *gin.Context) {
 	s := sessions.Default(c)
 	u, err := user.Find(s.Get("current_user"))
 	if err == nil {
-		p := Project{Name: q.Name, Owner: u}
+		p := Project{Name: q.Name, OwnerId: u.Id}
 		Save(&p)
 		c.JSON(http.StatusOK, gin.H{"project": p})
 	} else {
@@ -35,7 +35,13 @@ func (r *Resource) Create(c *gin.Context) {
 }
 
 func (r *Resource) List(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{"projects": AllProjects()})
+	s := sessions.Default(c)
+	u, err := user.Find(s.Get("current_user"))
+	if err == nil {
+		c.JSON(http.StatusOK, gin.H{"projects": AllProjects(u)})
+	} else {
+		c.JSON(http.StatusForbidden, gin.H{"msg": "Forbidden"})
+	}
 }
 
 func (r *Resource) Show(c *gin.Context) {

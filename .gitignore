@@ -1,6 +1,5 @@
 editor
 assets/js/lib
-assets/swagger-ui
 vendor/*
 !vendor/vendor.json
 tmp

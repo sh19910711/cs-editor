@@ -9,7 +9,6 @@ import (
 	"github.com/gin-gonic/contrib/renders/multitemplate"
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"github.com/satori/go.uuid"
 	"path/filepath"
 )
 
@@ -31,7 +30,10 @@ func main() {
 	user.AutoMigrate()
 	project.AutoMigrate()
 
-	store := sessions.NewCookieStore(uuid.NewV4().Bytes()) // TODO: use redis
+	store, err := sessions.NewRedisStore(10, "tcp", "localhost:6379", "", []byte("TODO: secret"))
+	if err != nil {
+		panic("Error: setup session store")
+	}
 
 	r := gin.Default()
 	r.HTMLRender = createRender()
@@ -61,6 +63,7 @@ func main() {
 
 	// TODO:
 	r.Static("/swagger", "./swagger")
+	r.Static("/swagger-ui", "./vendor/swagger-ui")
 	dr := dev.Resource{}
 	devpages := r.Group("dev")
 	devpages.GET("/doc", dr.Doc)

@@ -6,8 +6,7 @@ build:
 
 swagger-ui: tmp/swagger-ui.tar.gz
 	cd tmp && tar zxf swagger-ui.tar.gz
-	mkdir -p assets/swagger-ui
-	cp -r tmp/swagger-ui-$(SWAGGER_VERSION)/dist/* assets/swagger-ui/
+	if [ ! -d vendor/swagger-ui ]; then cp -r tmp/swagger-ui-$(SWAGGER_VERSION)/dist vendor/swagger-ui; fi
 
 tmp/swagger-ui.tar.gz:
 	mkdir -p tmp

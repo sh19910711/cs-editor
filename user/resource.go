@@ -11,7 +11,7 @@ type Resource struct {
 }
 
 type UserForm struct {
-	LoginID  string `form:"user.login_id" binding:"required,max=32"`
+	LoginId  string `form:"user.login_id" binding:"required,max=32"`
 	Password string `form:"user.password" binding:"required,max=128"`
 }
 
@@ -46,12 +46,12 @@ func (r *Resource) Create(c *gin.Context) {
 	var uf UserForm
 	c.Bind(&uf)
 
-	if Exist(uf.LoginID) {
+	if Exist(uf.LoginId) {
 		c.JSON(http.StatusConflict, gin.H{"msg": "ERROR: already exists"})
 		return
 	}
 
-	u := User{LoginID: uf.LoginID, Password: uf.Password}
+	u := User{LoginId: uf.LoginId, Password: uf.Password}
 	Save(&u)
 
 	c.HTML(http.StatusOK, "ok.html.tmpl", gin.H{"msg": "created"})
@@ -61,13 +61,13 @@ func (r *Resource) Auth(c *gin.Context) {
 	var uf UserForm
 	c.Bind(&uf)
 
-	u, err := FindWithPassword(uf.LoginID, uf.Password)
+	u, err := FindWithPassword(uf.LoginId, uf.Password)
 	if err != nil {
 		log.Warn(err)
 		c.JSON(http.StatusForbidden, gin.H{"msg": "login failed"})
 	} else {
 		s := sessions.Default(c)
-		s.Set("current_user", u.LoginID)
+		s.Set("current_user", u.LoginId)
 		s.Save()
 
 		c.Redirect(http.StatusFound, "/dashboard")

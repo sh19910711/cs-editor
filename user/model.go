@@ -8,8 +8,8 @@ import (
 )
 
 type User struct {
-	ID       int32  `json:"-" db:"id"`
-	LoginID  string `json:"login_id" db:"login_id"`
+	Id       int32  `json:"id" db:"id" sql:"unique"`
+	LoginId  string `json:"login_id" db:"login_id"`
 	Password string `json:"-" db:"password"`
 }
 
@@ -34,8 +34,8 @@ func Save(u *User) {
 	db.ORM.Save(&u) // TODO: error handling
 }
 
-func Find(loginID interface{}) (u User, err error) {
-	if db.ORM.Where("login_id = ?", loginID).First(&u).RecordNotFound() {
+func Find(loginId interface{}) (u User, err error) {
+	if db.ORM.Where("login_id = ?", loginId).First(&u).RecordNotFound() {
 		return u, errors.New("not found")
 	}
 	return u, err

@@ -17,7 +17,7 @@ func Init() error {
 	if err != nil {
 		return err
 	}
-	ORM = db
+	ORM = db.Debug()
 	return nil
 }
 
