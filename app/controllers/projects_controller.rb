@@ -13,6 +13,7 @@ class ProjectsController < ActionController::Base
     @project = Project.new(project_params)
 
     if @project.save
+      @project.mkdir
       redirect_to @project, msg: 'created'
     else
       render :new

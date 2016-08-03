@@ -13,13 +13,13 @@ module Editor
     # -- all .rb files in that directory are automatically loaded.
 
     # create workspace if not exists
-    config.workspace_path = "./workspace"
+    config.workspace = "./workspace"
     config.before_initialize do
-      unless Dir.exists?(config.workspace_path)
-        FileUtils.mkdir_p config.workspace_path
+      unless Dir.exists?(config.workspace)
+        FileUtils.mkdir_p config.workspace
       end
     end
 
-    config.web_console.whitelisted_ips = '0.0.0.0/0'
+    config.web_console.whitelisted_ips = '0.0.0.0/0' if Rails.env.development?
   end
 end
