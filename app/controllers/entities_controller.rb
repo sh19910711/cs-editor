@@ -17,6 +17,11 @@ class EntitiesController < ActionController::Base
 
     if @entity.save
       @entity.touch
+
+      if c = entity_content_params
+        @entity.writefile c[:content]
+      end
+
       redirect_to project_entity_path(@project, @entity)
     else
       redirect_to @project

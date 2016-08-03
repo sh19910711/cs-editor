@@ -24,6 +24,14 @@ class ProjectsController < ActionController::Base
     @project = Project.new
   end
 
+  def destroy
+    @project = Project.find(params[:id])
+    @project.destroy
+    @project.rmdir
+
+    redirect_to projects_path
+  end
+
   private
 
     def project_params

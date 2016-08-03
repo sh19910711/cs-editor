@@ -2,6 +2,6 @@
   <div><%= f.label :path %></div>
   <div><%= f.text_field :path %></div>
   <div>Content</div>
-  <div><textarea name="content"></textarea></div>
+  <div><%= f.text_area :content %></div>
   <div><%= f.submit "Create" %></div>
 <% end %>

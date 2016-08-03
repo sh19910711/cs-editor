@@ -3,7 +3,16 @@ class Project < ApplicationRecord
   validates :name, uniqueness: true
 
   def mkdir
-    workspace = Pathname(Editor::Application.config.workspace)
-    FileUtils.mkdir_p workspace.join(name) # TODO: abstract
+    FileUtils.mkdir_p dirpath
   end
+
+  def rmdir
+    FileUtils.rm_rf dirpath
+  end
+
+  private
+
+    def dirpath
+      Pathname(Editor::Application.config.workspace).join(name)
+    end
 end
