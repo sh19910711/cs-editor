@@ -1,3 +1,8 @@
+<% if @project.errors.full_messages.any? %>
+  <% @project.errors.full_messages.each do |m| %>
+    <p><%= m %></p>
+  <% end %>
+<% end %>
 <%= form_for @project do |f| %>
   <div><%= f.label :name %></div>
   <div><%= f.text_field :name %></div>
