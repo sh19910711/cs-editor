@@ -1,5 +1,7 @@
 <h1>edit: <%= @entity.path %></h1>
-<textarea><%= @entity.readfile %></textarea>
+<%= form_for [@project, @entity] do |f| %>
+  <textarea><%= @entity.readfile %></textarea>
+<% end %>
 <ul>
   <li><%= link_to 'Back', project_path(@project) %></li>
 </ul>

@@ -12,4 +12,8 @@ class Entity < ApplicationRecord
     logger.debug "read: #{workspace.join(project.name, path)}"
     File.read(workspace.join(project.name, path))
   end
+
+  def to_param
+    path
+  end
 end

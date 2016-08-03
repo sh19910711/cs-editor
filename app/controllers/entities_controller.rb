@@ -16,7 +16,7 @@ class EntitiesController < ActionController::Base
     @entity = @project.entities.new(entity_params)
     if @entity.save
       @entity.touch
-      redirect_to project_entity_path([@project, @entity], :path => @entity.path)
+      redirect_to project_entity_path(@project, @entity)
     else
       redirect_to @project
     end
