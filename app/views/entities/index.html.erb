@@ -1,7 +1,0 @@
-<h1>files</h1>
-<p><%= link_to 'Create New File', new_project_entity_path %></p>
-<ul>
-<% @project.entities.each do |e| %>
-  <li><%= link_to e.path, project_entity_path([@project, e], path: e.path) %></li>
-<% end %>
-</ul>
