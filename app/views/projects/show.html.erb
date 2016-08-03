@@ -1,10 +1,18 @@
 <h1>Project: <%= @project.name %></h1>
-<p><%= link_to 'Create New File', new_project_entity_path(@project) %></p>
+
+<h2>Actions</h2>
+<ul>
+  <li><%= link_to 'Create New File', new_project_entity_path(@project) %></li>
+</ul>
+
+<h2>Files</h2>
 <ul>
 <% @project.entities.each do |e| %>
   <li><%= link_to e.path, project_entity_path(@project, e) %></li>
 <% end %>
 </ul>
+
+<h2>Menu</h2>
 <ul>
   <li><%= link_to 'Back to all projects', projects_path %></li>
 </ul>

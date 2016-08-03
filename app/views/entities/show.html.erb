@@ -1,7 +1,10 @@
-<h1>edit: <%= @entity.path %></h1>
+<h1>Edit: <%= @entity.path %></h1>
+
 <%= form_for [@project, @entity] do |f| %>
-  <textarea><%= @entity.readfile %></textarea>
+  <div><%= f.text_area :content %></div>
+  <div><%= f.submit 'Edit' %></div>
 <% end %>
+
 <ul>
   <li><%= link_to 'Back', project_path(@project) %></li>
 </ul>

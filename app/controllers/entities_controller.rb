@@ -14,6 +14,7 @@ class EntitiesController < ActionController::Base
 
   def create
     @entity = @project.entities.new(entity_params)
+
     if @entity.save
       @entity.touch
       redirect_to project_entity_path(@project, @entity)
@@ -24,10 +25,26 @@ class EntitiesController < ActionController::Base
 
   def show
     @path = params[:path]
-    @entity = @project.entities.find_by(path: @path)
+    @entity = @project.entities.find_by(path: params[:path])
+    @entity.readfile!
+  end
+
+  def update
+    @entity = @project.entities.find_by(path: params[:path])
+
+    if c = entity_content_params
+      @entity.writefile c[:content]
+      redirect_to project_entity_path(@project, @entity)
+    else
+      redirect_to @project
+    end
   end
 
   private
+
+    def entity_content_params
+      params.require(:entity).permit(:content)
+    end
 
     def entity_params
       params.require(:entity).permit(:path)
