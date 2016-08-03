@@ -2,6 +2,6 @@
 <p><%= link_to 'Create New Project', new_project_path %></p>
 <ul>
 <% @projects.each do |p| %>
-  <li><%= link_to p.id, p %></li>
+  <li><%= link_to p.name, p %></li>
 <% end %>
 </ul>

@@ -15,6 +15,7 @@ class EntitiesController < ActionController::Base
   def create
     @entity = @project.entities.new(entity_params)
     if @entity.save
+      @entity.touch
       redirect_to project_entity_path([@project, @entity], :path => @entity.path)
     else
       redirect_to @project
@@ -23,6 +24,7 @@ class EntitiesController < ActionController::Base
 
   def show
     @path = params[:path]
+    @entity = @project.entities.find_by(path: @path)
   end
 
   private
