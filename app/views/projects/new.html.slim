@@ -1,0 +1,14 @@
+h1 Create new project
+
+- if @project.errors.full_messages.any?
+  h2 System Messages
+  - @project.errors.full_messages.each do |m|
+    p= m 
+
+= form_for @project do |f|
+  div.form-group
+    = f.label :name
+    = f.text_field :name, :class => 'form-control'
+  div.form-group
+    = f.submit "Create", :class => 'btn btn-primary'
+    = link_to 'Cancel', projects_path, :class => 'btn btn-warning'

@@ -1,0 +1,15 @@
+h1= "Create new file for #{@project.name}"
+
+= form_for [@project, @entity] do |f|
+  div.form-group
+    = f.label :path
+    = f.text_field :path, :id => 'entity_path', :class => 'form-control', :placeholder => 'e.g., path/to/file.c'
+  div.form-group
+    = f.label :content
+    = f.text_area :content, :id => 'entity_content', :class => 'form-control'
+    div#editor
+  div.form-group
+    = f.submit 'Create', :class => 'btn btn-primary'
+    = link_to 'Cancel', project_path(@project), :class => 'btn btn-warning'
+
+= render :partial => 'assets'

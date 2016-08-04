@@ -1,0 +1,13 @@
+h1= "Project: #{@project.name}"
+
+h2 Navigations
+ul.nav.nav-pills.nav-stacked
+  li= link_to 'All projects', projects_path
+
+h2 Actions
+= link_to 'Create new file', new_project_entity_path(@project), :class => 'btn btn-primary'
+
+h2 Files
+ul.nav.nav-pills.nav-stacked
+  - @project.entities.each do |e|
+    li= link_to e.path, project_entity_path(@project, e)
