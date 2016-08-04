@@ -1,5 +1,6 @@
 class EntitiesController < ActionController::Base
   protect_from_forgery :with => :exception
+  layout 'application'
 
   before_filter do
     @project = Project.find(params[:project_id])
