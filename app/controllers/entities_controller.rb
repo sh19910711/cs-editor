@@ -30,12 +30,12 @@ class EntitiesController < ActionController::Base
 
   def show
     @path = params[:path]
-    @entity = @project.entities.find_by(path: params[:path])
+    @entity = @project.entities.find_by(path: filepath)
     @entity.readfile!
   end
 
   def update
-    @entity = @project.entities.find_by(path: params[:path])
+    @entity = @project.entities.find_by(path: filepath)
 
     if c = entity_params[:content]
       @entity.writefile c
@@ -46,6 +46,10 @@ class EntitiesController < ActionController::Base
   end
 
   private
+
+    def filepath
+      params[:path] + (params[:format] ? "." + params[:format] : '')
+    end
 
     def entity_params
       params.require(:entity).permit(:path, :content)

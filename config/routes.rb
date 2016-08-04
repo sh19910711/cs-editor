@@ -3,6 +3,6 @@ Rails.application.routes.draw do
   root 'projects#index'
   resources :projects do
     resources :entities, :param => :path
-    get '/entities/*path', to: 'entities#show', as: 'Entity'
+    get '/entities/*path', :to => 'entities#show', :as => 'Entity', :format => false
   end
 end
