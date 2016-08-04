@@ -1,10 +1,17 @@
 h1 All Projects
 
 h2 Actions
-ul
-  li= link_to 'Create New Project', new_project_path
+div
+  = link_to 'Create New Project', new_project_path, :class => 'btn btn-primary'
 
 h2 Projects
-ul
+div.row
   - @projects.each do |p|
-    li== "#{link_to p.name, p} [#{link_to 'Delete', project_path(p), :method => :delete, :data => {:confirm => "Delete? #{p.name}"}}]"
+    div.col-sm-4
+      div.panel.panel-default
+        div.panel-heading
+          h3.panel-title= link_to p.name, p
+        div.panel-body
+          p= "#{p.entities.length} files"
+          = link_to 'Open', project_path(p), :class => 'btn btn-primary'
+          = link_to 'Delete', project_path(p), :class => 'btn btn-danger', :method => :delete, :data => {:confirm => "Delete? #{p.name}"}
