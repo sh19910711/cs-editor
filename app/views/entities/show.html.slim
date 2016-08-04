@@ -3,7 +3,7 @@ h1= "Edit: #{@entity.path}"
 = form_for [@project, @entity] do |f|
   div.form-group
     = f.label :path
-    = f.text_field :path, :class => 'form-control'
+    = f.text_field :path, :class => 'form-control', :disabled => true
   div.form-group
     = f.label :content
     = f.text_area :content, :id => 'entity_content', :class => 'form-control'

@@ -3,7 +3,8 @@
 
   $(_=> {
     const editor = ace.edit('editor')
-    editor.setTheme('ace/theme/monokai')
+    editor.setTheme('ace/theme/solarized_light')
+    editor.setFontSize(18);
 
     const content = $('#entity_content')
     content.hide()

@@ -2,7 +2,9 @@ h1 All Projects
 
 h2 Actions
 div
-  = link_to 'Create New Project', new_project_path, :class => 'btn btn-primary'
+  = link_to new_project_path, :class => 'btn btn-primary'
+    span.glyphicon.glyphicon-plus
+    = ' Create New Project'
 
 h2 Projects
 div.row
@@ -10,8 +12,13 @@ div.row
     div.col-sm-4
       div.panel.panel-default
         div.panel-heading
-          h3.panel-title= link_to p.name, p
+          h3.panel-title
+            = link_to p.name, p
         div.panel-body
           p= "#{p.entities.length} files"
-          = link_to 'Open', project_path(p), :class => 'btn btn-primary'
-          = link_to 'Delete', project_path(p), :class => 'btn btn-danger', :method => :delete, :data => {:confirm => "Delete? #{p.name}"}
+          = link_to project_path(p), :class => 'btn btn-primary'
+            span.glyphicon.glyphicon-folder-open
+            = ' Open'
+          = link_to project_path(p), :class => 'btn btn-danger', :method => :delete, :data => {:confirm => "Delete? #{p.name}"}
+            span.glyphicon.glyphicon-fire
+            = ' Delete'
