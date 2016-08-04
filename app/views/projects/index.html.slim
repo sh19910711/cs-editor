@@ -7,4 +7,4 @@ ul
 h2 Projects
 ul
   - @projects.each do |p|
-    li== "#{link_to p.name, p} [#{link_to 'Delete', project_path(p), :method => :delete}]"
+    li== "#{link_to p.name, p} [#{link_to 'Delete', project_path(p), :method => :delete, :data => {:confirm => "Delete? #{p.name}"}}]"
