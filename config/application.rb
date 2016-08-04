@@ -11,5 +11,15 @@ module Editor
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
+
+    # create workspace if not exists
+    config.workspace = "./workspace"
+    config.before_initialize do
+      unless Dir.exists?(config.workspace)
+        FileUtils.mkdir_p config.workspace
+      end
+    end
+
+    config.web_console.whitelisted_ips = '0.0.0.0/0' if Rails.env.development?
   end
 end
