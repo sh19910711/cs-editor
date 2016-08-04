@@ -1,7 +1,7 @@
 (function() {
   "use strict"
 
-  $(_=> {
+  $(function() {
     const editor = ace.edit('editor')
     editor.setTheme('ace/theme/solarized_light')
     editor.setFontSize(18);
@@ -12,11 +12,11 @@
 
     const session = editor.getSession()
     updatePath(path.val())
-    $('#entity_path').on('change', _=> {
+    $('#entity_path').on('change', function() {
       updatePath(path.val())
     });
     session.setValue(content.val())
-    session.on('change', _=> {
+    session.on('change', function() {
       content.val(session.getValue())
     })
 
