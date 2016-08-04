@@ -6,6 +6,7 @@ class EntitiesController < ActionController::Base
   end
 
   def index
+    render :json => @project.entities.all
   end
 
   def new
@@ -13,7 +14,7 @@ class EntitiesController < ActionController::Base
   end
 
   def create
-    @entity = @project.entities.new(entity_params)
+    @entity = @project.entities.new(new_entity_params)
 
     if @entity.save_and_touchfile
       if c = entity_params[:content]
@@ -35,8 +36,8 @@ class EntitiesController < ActionController::Base
   def update
     @entity = @project.entities.find_by(path: params[:path])
 
-    if c = entity_content_params
-      @entity.writefile c[:content]
+    if c = entity_params[:content]
+      @entity.writefile c
       redirect_to project_entity_path(@project, @entity), flash: { :success => 'Updated :-)' }
     else
       redirect_to @project
@@ -46,6 +47,10 @@ class EntitiesController < ActionController::Base
   private
 
     def entity_params
-      params.require(:entity).permit(:content, :path)
+      params.require(:entity).permit(:path, :content)
+    end
+
+    def new_entity_params
+      entity_params.except(:content)
     end
 end

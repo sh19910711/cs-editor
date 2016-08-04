@@ -1,0 +1,10 @@
+h1 All Projects
+
+h2 Actions
+ul
+  li= link_to 'Create New Project', new_project_path
+
+h2 Projects
+ul
+  - @projects.each do |p|
+    li== "#{link_to p.name, p} [#{link_to 'Delete', project_path(p), :method => :delete}]"

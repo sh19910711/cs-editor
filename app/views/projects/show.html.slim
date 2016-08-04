@@ -1,0 +1,14 @@
+h1= "Project: #{@project.name}"
+
+h2 Actions
+ul
+  li== link_to 'Create New File', new_project_entity_path(@project)
+
+h2 Files
+ul
+  - @project.entities.each do |e|
+    li== link_to e.path, project_entity_path(@project, e)
+
+h2 Menu
+ul
+  li== link_to 'Back to all projects', projects_path

@@ -1,0 +1,8 @@
+h1= "Edit: #{@entity.path}"
+
+= form_for [@project, @entity] do |f|
+  div= f.text_area :content
+  div= f.submit 'Edit'
+
+ul
+  li= link_to 'Back', project_path(@project)
