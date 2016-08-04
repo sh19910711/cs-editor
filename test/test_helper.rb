@@ -7,4 +7,8 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+  setup do
+    FileUtils.mkdir_p 'test/workspace'
+    Editor::Application.config.workspace = 'test/workspace'
+  end
 end

@@ -5,5 +5,5 @@ one:
   project_id: 1
 
 two:
-  path: MyString
+  path: OtherString
   project_id: 1

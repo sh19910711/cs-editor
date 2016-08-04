@@ -1,0 +1,13 @@
+language: ruby
+rvm: 2.3.1
+cache: bundler
+
+env:
+  global:
+    - RACK_ENV=test
+
+before_script:
+  - bundle exec rake db:migrate
+
+script:
+  - bundle exec rake test
