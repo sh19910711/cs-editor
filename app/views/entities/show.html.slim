@@ -3,7 +3,9 @@ h1= "Edit: #{@entity.path}"
 = form_for [@project, @entity] do |f|
   div.form-group
     = f.label :content
-    = f.text_area :content, :class => 'form-control'
+    = f.text_area :content, :id => 'editor', :class => 'form-control'
   div.form-group
     = f.submit 'Edit', :class => 'btn btn-primary'
     = link_to 'Cancel', project_path(@project), :class => 'btn btn-warning'
+
+= render :partial => 'assets'
