@@ -15,16 +15,14 @@ class EntitiesController < ActionController::Base
   def create
     @entity = @project.entities.new(entity_params)
 
-    if @entity.save
-      @entity.touch
-
-      if c = entity_content_params
-        @entity.writefile c[:content]
+    if @entity.save_and_touchfile
+      if c = entity_params[:content]
+        @entity.writefile c
       end
 
       redirect_to project_entity_path(@project, @entity)
     else
-      redirect_to @project
+      redirect_to @project, notice: "couldn't create a file"
     end
   end
 
@@ -39,7 +37,7 @@ class EntitiesController < ActionController::Base
 
     if c = entity_content_params
       @entity.writefile c[:content]
-      redirect_to project_entity_path(@project, @entity)
+      redirect_to project_entity_path(@project, @entity), flash: { :success => 'Updated :-)' }
     else
       redirect_to @project
     end
@@ -47,11 +45,7 @@ class EntitiesController < ActionController::Base
 
   private
 
-    def entity_content_params
-      params.require(:entity).permit(:content)
-    end
-
     def entity_params
-      params.require(:entity).permit(:path)
+      params.require(:entity).permit(:content, :path)
     end
 end

@@ -1,7 +1,25 @@
 class Entity < ApplicationRecord
   belongs_to :project
 
-  def touch
+  def save_and_touchfile
+    if filepath.exist?
+      logger.warn "Entity#save_and_touchfile: #{filepath} already exists"
+      return false
+    else
+      mkdirp
+      touchfile
+      save
+      return true
+    end
+  end
+
+  # create parent directories
+  def mkdirp
+    logger.debug "Entity#mkdirp: #{filepath.dirname}"
+    FileUtils.mkdir_p(filepath.dirname)
+  end
+
+  def touchfile
     logger.debug "Entity#touch: #{filepath}"
     FileUtils.touch(filepath)
   end
