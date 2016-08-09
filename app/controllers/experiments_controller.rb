@@ -11,7 +11,7 @@ class ExperimentsController < ActionController::Base
   # POST /sendto
   def sendto
     @project = Project.find(params[:project_id])
-    res = @project.__send_request(params[:request_method], params[:request_url], params[:request_params])
+    res = @project.__send_request(params[:request_method], params[:request_url], params[:request_params] || {})
     render :json => { msg: 'ok', response: res }
   rescue Errno::ECONNREFUSED => e
     render :json => { msg: 'error', error: e }

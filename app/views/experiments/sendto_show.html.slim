@@ -59,7 +59,9 @@ javascript:
       const req_params_values = form.find('.params-value').map((_, o) => $(o).val());
       const req_params = {};
       req_params_keys.each(function(k) {
-        req_params[req_params_keys[k]] = req_params_values[k];
+        if (req_params_keys[k] != '') {
+          req_params[req_params_keys[k]] = req_params_values[k];
+        }
       });
       return $.post({method: 'post', url: url, data: { request_method: req_method, request_url: req_url, request_params: req_params }})
     }
