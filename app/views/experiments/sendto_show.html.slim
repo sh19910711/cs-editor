@@ -1,0 +1,72 @@
+h1 Send request with a project archive file
+
+div.form#form
+  div.form-group
+    div.input-group
+      span.input-group-btn
+        = select_tag :target_method, options_for_select(['POST', 'PUT']), :class => 'btn'
+      = text_field 'target', :url, :class => 'form-control', :placeholder => 'http://example.com'
+
+  h2 params
+
+  div.form-group
+    table.params.table
+      tr
+        td
+          input.params-key.form-control name="target[key][]" placeholder="key"
+        td
+          input.params-value.form-control name="target[value][]" placeholder="value"
+    table.table
+      tr
+        td colspan=2
+          button.add-param.btn.btn-primary Add New Param
+
+  hr
+
+  div.form-group
+    = submit_tag 'Send', :class => 'send-btn btn btn-primary'
+    = link_to 'Cancel', project_path(@project), :class => 'btn btn-warning'
+
+h2 Responses
+
+table.table#responses
+
+javascript:
+  $(function() {
+    const responses = $('#responses');
+    const form = $('#form');
+
+    // send request
+    $(document).on('click', '.send-btn', function() {
+      post('#{project_experiments_sendto_path(@project)}').done(function(res) {
+        prepend(responses, JSON.stringify(res));
+      });
+    });
+
+    // add new param
+    $(document).on('click', '.add-param', function() {
+      const params = $(this).parents('table').prev();
+      const newParam = params.children().first().clone();
+      newParam.find('.params-key').val('');
+      newParam.find('.params-value').val('');
+      params.append(newParam);
+    });
+
+    function post(url) {
+      const req_method = form.find('#target_method').val()
+      const req_url = form.find('#target_url').val()
+      const req_params_keys = form.find('.params-key').map((_, o) => $(o).val());
+      const req_params_values = form.find('.params-value').map((_, o) => $(o).val());
+      const req_params = {};
+      req_params_keys.each(function(k) {
+        if (req_params_keys[k] != '') {
+          req_params[req_params_keys[k]] = req_params_values[k];
+        }
+      });
+      return $.post({method: 'post', url: url, data: { request_method: req_method, request_url: req_url, request_params: req_params }})
+    }
+
+    function prepend(el, str) {
+      el.prepend('<tr><td>' + str + '</td></tr>')
+    }
+  });
