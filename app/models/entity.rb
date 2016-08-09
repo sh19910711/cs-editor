@@ -34,6 +34,11 @@ class Entity < ApplicationRecord
     File.write(filepath, content)
   end
 
+  def stat
+    logger.debug "Entity#stat: #{filepath}"
+    File.stat(filepath)
+  end
+
   def to_param
     path
   end
