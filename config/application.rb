@@ -13,7 +13,7 @@ module Editor
     # -- all .rb files in that directory are automatically loaded.
 
     # create workspace if not exists
-    config.workspace = "./workspace"
+    config.workspace = File.expand_path('./workspace')
     config.before_initialize do
       unless Dir.exists?(config.workspace)
         FileUtils.mkdir_p config.workspace
