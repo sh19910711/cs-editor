@@ -15,6 +15,7 @@
     $('#entity_path').on('change', function() {
       updatePath(path.val())
     });
+    session.setUseSoftTabs(false);
     session.setValue(content.val())
     session.on('change', function() {
       content.val(session.getValue())
